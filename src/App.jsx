@@ -4,6 +4,7 @@ import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import "./i18n.js";
+import { Link } from "react-router-dom";
 
 import Header from "./components/Header.jsx";
 
