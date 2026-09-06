@@ -36,7 +36,7 @@ const Author = () => {
               border: "2px solid #404040",
             }}
           />
-          <h1 className="h4 fw-bold text-white mb-1">Назарій Яворський</h1>
+          <h1 className="h4 fw-bold text-white mb-1">{t("rgr.author-title")}</h1>
           <p className="text-primary small fw-semibold mb-3">
             {t("rgr.authorRole")}
           </p>
