@@ -100,12 +100,12 @@ function App() {
         style={{ background: "#0a0a0a" }}
       >
         <p className="text-secondary small m-0">
-          © 2026 Dormly. Автор розробки:{" "}
+          © 2026 Dormly. {t("rgr.footerText")}
           <Link
             to="/author"
             className="text-white fw-bold text-decoration-underline"
           >
-            Яворський Н. П.
+            {t("rgr.author")}
           </Link>
         </p>
       </footer>

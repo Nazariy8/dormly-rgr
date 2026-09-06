@@ -49,7 +49,6 @@ const FAQ = ({ user }) => {
               )}
             </p>
 
-            {/* Віджет погоди (Інформер згідно методички) */}
             {weather && (
               <div
                 className="d-inline-flex align-items-center gap-2 px-3 py-1 mt-3 rounded-pill"
@@ -59,12 +58,13 @@ const FAQ = ({ user }) => {
                   fontSize: "13px",
                 }}
               >
-                <span>📍 Львів:</span>
+                <span>📍 {t("rgr.weatherCity")}:</span>
                 <span className="text-white fw-bold">
                   {weather.temperature}°C
                 </span>
                 <span className="text-secondary">
-                  | Вітер: {weather.windspeed} км/год
+                  | {t("rgr.weatherWind")}: {weather.windspeed}{" "}
+                  {t("rgr.weatherSpeedUnit")}
                 </span>
               </div>
             )}
@@ -105,14 +105,13 @@ const FAQ = ({ user }) => {
                   </button>
                 </div>
 
-                {/* Вбудоване YouTube відео (згідно методички) */}
                 <div
                   className="p-3 rounded-4 mb-4"
                   style={{ background: "#121212", border: "1px solid #262626" }}
                 >
                   <div className="small text-secondary fw-bold mb-2">
-                    <i className="bi bi-youtube text-danger me-2"></i>Як
-                    користуватися Dormly
+                    <i className="bi bi-youtube text-danger me-2"></i>
+                    {t("rgr.videoTitle")}
                   </div>
                   <div
                     className="ratio ratio-16x9 rounded-3 overflow-hidden"
@@ -177,19 +176,15 @@ const FAQ = ({ user }) => {
                 ))}
               </div>
 
-              {/* Інтерактивна карта кампусу (згідно методички) */}
               <div
                 className="p-4 rounded-4"
                 style={{ background: "#121212", border: "1px solid #262626" }}
               >
                 <h3 className="h5 fw-bold text-white mb-2">
-                  <i className="bi bi-geo-alt me-2 text-primary"></i>Студентське
-                  містечко та локації
+                  <i className="bi bi-geo-alt me-2 text-primary"></i>
+                  {t("rgr.mapTitle")}
                 </h3>
-                <p className="text-secondary small mb-3">
-                  Карта розташування гуртожитків Національного університету
-                  «Львівська політехніка».
-                </p>
+                <p className="text-secondary small mb-3">{t("rgr.mapDesc")}</p>
                 <div
                   className="rounded-3 overflow-hidden"
                   style={{ height: "300px", border: "1px solid #262626" }}

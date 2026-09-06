@@ -406,5 +406,18 @@
     "alertEmpty": "Please enter your email!",
     "alertSuccess": "Reset link sent to {{email}}. Check your inbox!",
     "alertError": "Failed to send reset link. Please check your email address."
+  },
+  "rgr": {
+    "author": "Yavorskyi N.P.",
+    "weatherCity": "Lviv",
+    "weatherWind": "Wind",
+    "weatherSpeedUnit": "km/h",
+    "videoTitle": "How to use Dormly",
+    "mapTitle": "Campus & Dorm Locations",
+    "mapDesc": "Map showing dormitories of Lviv Polytechnic National University.",
+    "authorRole": "Student of CAD Department, ICSIT",
+    "authorBio": "Developer of the Dormly platform as part of the academic coursework for 'Web Development and Design Technologies'. Specialization: Frontend/Fullstack development (React, TypeScript, Firebase, SCSS).",
+    "backHome": "Back to Home",
+    "footerText": "Developed by:"
   }
 }

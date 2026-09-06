@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
-import avatarImg from "../img/profile/user.jpg"; // або будь-яке фото
+import avatarImg from "../img/profile/user.jpg";
 
 const Author = () => {
+  const { t } = useTranslation();
+
   return (
     <>
       <main
@@ -35,16 +38,14 @@ const Author = () => {
           />
           <h1 className="h4 fw-bold text-white mb-1">Назарій Яворський</h1>
           <p className="text-primary small fw-semibold mb-3">
-            Студент кафедри САПР, ІКНІ
+            {t("rgr.authorRole")}
           </p>
 
           <p
             className="text-secondary small mb-4"
             style={{ lineHeight: "1.6" }}
           >
-            Розробник платформи Dormly в рамках розрахунково-графічної роботи з
-            дисципліни «Технології веб-розробки та дизайну». Спеціалізація:
-            Frontend/Fullstack розробка (React, TypeScript, Firebase, SCSS).
+            {t("rgr.authorBio")}
           </p>
 
           <div className="d-flex justify-content-center gap-2 mb-4">
@@ -94,7 +95,7 @@ const Author = () => {
             to="/"
             className="btn btn-outline-light btn-sm rounded-pill px-4 py-2"
           >
-            На головну
+            {t("rgr.backHome")}
           </Link>
         </section>
       </main>
