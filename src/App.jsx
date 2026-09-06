@@ -4,6 +4,8 @@ import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import "./i18n.js";
+
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import Header from "./components/Header.jsx";
@@ -23,6 +25,7 @@ import Author from "./pages/Author";
 import "./css/main.scss";
 
 function App() {
+  const { t } = useTranslation();
   const location = useLocation();
 
   const hideHeaderRoutes = [
