@@ -33,7 +33,6 @@ const FAQ = ({ user }) => {
 
   return (
     <>
-      <Header />
       <main className="faq-page py-5">
         <div className="container">
           <header className="text-center mb-5">

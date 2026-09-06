@@ -6,7 +6,6 @@ import avatarImg from "../img/profile/user.jpg"; // або будь-яке фо�
 const Author = () => {
   return (
     <>
-      <Header />
       <main
         className="d-flex align-items-center justify-content-center"
         style={{
