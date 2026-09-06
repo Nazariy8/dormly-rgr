@@ -17,6 +17,7 @@ import FAQ from "./pages/FAQ.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import Chat from "./pages/Chat.jsx";
 import ResetPass from "./pages/ResetPass.jsx";
+import Author from "./pages/Author";
 
 import "./css/main.scss";
 
@@ -70,6 +71,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Main user={user} />} />
+        <Route path="/author" element={<Author />} />
 
         <Route path="/login" element={<Auth goal="log" user={user} />} />
         <Route path="/regist" element={<Auth goal="reg" user={user} />} />
@@ -84,15 +86,28 @@ function App() {
 
         <Route
           path="/roommates"
-          element={
-            <Roommates userAnswers={userAnswers}  user={user} />
-          }
+          element={<Roommates userAnswers={userAnswers} user={user} />}
         />
 
         <Route path="/faq" element={<FAQ user={user} />} />
         <Route path="/aboutus" element={<AboutUs user={user} />} />
         <Route path="/chat" element={<Chat user={user} />} />
       </Routes>
+
+      <footer
+        className="text-center py-4 border-top border-secondary-subtle"
+        style={{ background: "#0a0a0a" }}
+      >
+        <p className="text-secondary small m-0">
+          © 2026 Dormly. Автор розробки:{" "}
+          <Link
+            to="/author"
+            className="text-white fw-bold text-decoration-underline"
+          >
+            Яворський Н. П.
+          </Link>
+        </p>
+      </footer>
     </div>
   );
 }
