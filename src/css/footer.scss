@@ -1,0 +1,117 @@
+.footer-wrapper {
+  background-color: rgba(10, 10, 10, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 34px 0 24px;
+  color: var(--text-primary, #ededed);
+  font-family: inherit;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* Логотип та опис */
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 34px;
+    font-weight: 800;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+
+    .brand-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 16px;
+    }
+  }
+
+  .footer-desc {
+    color: var(--text-secondary, #a1a1a1);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 320px;
+  }
+
+  /* Колонки з посиланнями */
+  .footer-heading {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .footer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 12px;
+
+      a {
+        color: var(--text-secondary, #a1a1a1);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  /* Нижня панель (Копірайт та мова) */
+  .footer-bottom {
+    margin-top: 14px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-secondary, #a1a1a1);
+    font-size: 13px;
+
+    .copyright-link {
+      color: var(--text-secondary, #a1a1a1);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #ffffff;
+        text-decoration: underline;
+      }
+    }
+
+    .lang-selector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #ffffff;
+      }
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+  }
+}

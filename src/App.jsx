@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx"
 
 import Main from "./pages/Main.jsx";
 import Auth from "./pages/Auth.jsx";
@@ -28,14 +29,22 @@ function App() {
   const { t } = useTranslation();
   const location = useLocation();
 
-  const hideHeaderRoutes = [
+  const hideHFRoutes = [
     "/test",
     "/resultoftest",
     "/login",
     "/regist",
     "/resetpass",
   ];
-  const shouldShowHeader = !hideHeaderRoutes.includes(
+
+  const hideFooterRoutes = [
+    '/chat'
+  ]
+  const shouldShowHeader = !hideHFRoutes.includes(
+    location.pathname.toLowerCase(),
+  );
+
+  const shouldShowFooter = !hideFooterRoutes.includes(
     location.pathname.toLowerCase(),
   );
 
@@ -98,20 +107,7 @@ function App() {
         <Route path="/chat" element={<Chat user={user} />} />
       </Routes>
 
-      <footer
-        className="text-center py-4 border-top border-secondary-subtle"
-        style={{ background: "#0a0a0a" }}
-      >
-        <p className="text-secondary small m-0">
-          © 2026 Dormly. {t("rgr.footerText")}
-          <Link
-            to="/author"
-            className="text-white fw-bold text-decoration-underline"
-          >
-            {t("rgr.author")}
-          </Link>
-        </p>
-      </footer>
+     {shouldShowFooter && <Footer />}
     </div>
   );
 }
