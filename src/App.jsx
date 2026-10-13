@@ -38,6 +38,7 @@ function App() {
   ];
 
   const hideFooterRoutes = [
+    ...hideHFRoutes,
     '/chat'
   ]
   const shouldShowHeader = !hideHFRoutes.includes(
