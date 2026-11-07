@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+
+:root {
+  /* Фони (Vercel-стиль) */
+  --bg-main: #0a0a0a;
+  --bg-card: #121212;
+  --bg-input: #1a1a1a;
+
+  /* Рамки та розділювачі */
+  --border-subtle: #262626;
+  --border-focus: #404040;
+
+  /* Текст */
+  --text-primary: #ededed;
+  --text-secondary: #a1a1a1;
+  --text-muted: #666666;
+
+  /* Акценти з палітри */
+  --accent-purple: #6930c3;
+  --accent-cyan: #64dfdf;
+  --accent-mint: #80ffdb;
+
+  --custom-card-shadow: 0 8px 24px rgba(138, 79, 255, 0.12);
+  --custom-card-border: 1px solid rgba(138, 79, 255, 0.2);
+}
+
+@theme inline {
+  --color-page: var(--bg-main);
+  --color-card: var(--bg-card);
+  --color-input: var(--bg-input);
+
+  --color-line: var(--border-subtle);
+  --color-line-focus: var(--border-focus);
+
+  --color-fg: var(--text-primary);
+  --color-fg-secondary: var(--text-secondary);
+  --color-fg-muted: var(--text-muted);
+
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-cyan: var(--accent-cyan);
+  --color-accent-mint: var(--accent-mint);
+
+  --shadow-card: var(--custom-card-shadow);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+  }
+}
+body {
+  background-color: #0a0a0a;
+  color: #ededed;
+}

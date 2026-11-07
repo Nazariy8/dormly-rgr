@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import "../css/test.scss";
 import { db, auth } from "../firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
@@ -23,6 +22,37 @@ const testSchema = [
   { id: 14, category: "comfort", optionIds: ["14.1", "14.2", "14.3"] },
   { id: 15, category: "comfort", optionIds: ["15.1", "15.2", "15.3"] },
 ];
+
+/* ---------- Класи (перенесено з test.scss) ---------- */
+const wrapperCls =
+  "relative flex min-h-screen w-full flex-col items-center justify-center bg-page px-4 py-8 " +
+  "bg-[image:radial-gradient(circle_at_50%_15%,rgba(105,48,195,0.12)_0%,rgba(10,10,10,1)_70%)]";
+const backBtnCls =
+  "mb-6 flex h-10 w-10 items-center justify-center rounded-full border border-line bg-card text-fg-secondary " +
+  "transition-all duration-200 hover:border-line-focus hover:bg-[#181818] hover:text-white";
+const cardCls =
+  "relative flex min-h-[420px] w-full max-w-[680px] flex-col justify-between overflow-hidden rounded-[20px] " +
+  "border border-line bg-card px-5 pb-5 pt-7 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] " +
+  "min-[577px]:min-h-[460px] min-[577px]:px-8 min-[577px]:pb-7 min-[577px]:pt-9";
+const categoryBadgeCls =
+  "mb-4 self-start rounded-full border border-accent-cyan/20 bg-accent-cyan/[0.08] px-3 py-1 " +
+  "text-[12.5px] font-semibold tracking-[0.02em] text-accent-cyan";
+const questionTitleCls =
+  "mb-6 text-[length:clamp(1.25rem,2.5vw,1.6rem)] font-bold leading-[1.35] tracking-[-0.02em] text-white";
+const optionBase =
+  "flex cursor-pointer items-center justify-between rounded-xl border px-[18px] py-3.5 text-[14.5px] " +
+  "leading-[1.4] transition-all duration-200";
+const optionIdle =
+  "border-line bg-[#0e0e0e] text-fg hover:border-line-focus hover:bg-[#171717]";
+const optionSelected =
+  "border-accent-purple/60 bg-accent-purple/[0.12] font-semibold text-white";
+const btnPrevCls =
+  "cursor-pointer rounded-lg border border-line bg-transparent px-[18px] py-2 text-[13.5px] font-medium " +
+  "text-fg-secondary transition-all duration-150 enabled:hover:border-line-focus enabled:hover:bg-[#171717] " +
+  "enabled:hover:text-white disabled:cursor-not-allowed disabled:opacity-30";
+const btnNextCls =
+  "cursor-pointer rounded-lg border border-white bg-white px-6 py-2 text-[13.5px] font-semibold text-black " +
+  "transition-all duration-200 hover:border-[#e5e5e5] hover:bg-[#e5e5e5]";
 
 const Test = () => {
   const { t } = useTranslation();
@@ -108,48 +138,49 @@ const Test = () => {
     ((currentQuestionIndex + 1) / testSchema.length) * 100;
 
   return (
-    <main className="test-page-wrapper">
-      <Link
-        to="/"
-        className="auth-back-btn d-flex align-items-center justify-content-center mb-4"
-        title={t("test.backHome")}
-      >
+    <main className={wrapperCls}>
+      <Link to="/" className={backBtnCls} title={t("test.backHome")}>
         <i className="bi bi-arrow-left"></i>
       </Link>
 
-      <section className="test-container-card" aria-label="Habit Test">
+      <section className={cardCls} aria-label="Habit Test">
         <div
-          className="progress-bar-container"
+          className="absolute left-0 top-0 h-1 w-full bg-white/5"
           role="progressbar"
           aria-valuenow={progressPercentage}
           aria-valuemin="0"
           aria-valuemax="100"
         >
           <div
-            className="progress-bar-fill"
+            className="h-full bg-[image:linear-gradient(90deg,#7928ca,#4fb7b3)] transition-[width] duration-[350ms] ease-in-out"
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
 
         <div
-          className={`question-content ${isExiting ? "fade-out" : "fade-in"}`}
+          className={
+            "mb-6 flex grow flex-col transition-[opacity,transform] duration-[250ms] ease-in-out " +
+            (isExiting
+              ? "-translate-y-2 opacity-0"
+              : "translate-y-0 opacity-100")
+          }
         >
-          <div className="category-badge">
+          <div className={categoryBadgeCls}>
             {t(`test.categories.${currentQ.category}`)}
           </div>
 
-          <h1 className="question-title">
+          <h1 className={questionTitleCls}>
             {t(`test.questions.${currentQ.id}.text`)}
           </h1>
 
-          <div className="options-area">
-            <div className="options-grid">
+          <div>
+            <div className="flex flex-col gap-3">
               {currentQ.optionIds.map((optId) => {
                 const isSelected = selectedOptionIds[currentQ.id] === optId;
                 return (
                   <div
                     key={optId}
-                    className={`option-card ${isSelected ? "selected" : ""}`}
+                    className={`${optionBase} ${isSelected ? optionSelected : optionIdle}`}
                     onClick={() => handleSelect(optId)}
                     role="button"
                     tabIndex={0}
@@ -158,7 +189,7 @@ const Test = () => {
                       {t(`test.questions.${currentQ.id}.options.${optId}`)}
                     </span>
                     {isSelected && (
-                      <i className="bi bi-check-lg check-icon"></i>
+                      <i className="bi bi-check-lg ml-3 shrink-0 text-[15px] text-accent-mint"></i>
                     )}
                   </div>
                 );
@@ -168,22 +199,22 @@ const Test = () => {
         </div>
 
         <div>
-          <footer className="navigation-buttons">
+          <footer className="flex items-center justify-between border-t border-white/5 pt-[18px]">
             <button
               type="button"
-              className="btn-prev"
+              className={btnPrevCls}
               onClick={handlePrev}
               disabled={currentQuestionIndex === 0}
             >
               {t("test.btnBack")}
             </button>
 
-            <button type="button" className="btn-next" onClick={handleNext}>
+            <button type="button" className={btnNextCls} onClick={handleNext}>
               {isLastQuestion ? t("test.btnFinish") : t("test.btnNext")}
             </button>
           </footer>
 
-          <div className="step-indicator">
+          <div className="mt-3.5 text-center text-[12.5px] tracking-[0.01em] text-fg-muted">
             {t("test.stepIndicator", {
               current: currentQuestionIndex + 1,
               total: testSchema.length,

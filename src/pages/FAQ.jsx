@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Header from "../components/Header";
-import "../css/faq.scss";
+
+/* ---------- Класи (перенесено з faq.scss) ---------- */
+const sectionBadge =
+  "mb-4 inline-block text-xs font-semibold uppercase tracking-[0.08em] text-accent-cyan";
+const sectionHeading =
+  "mb-3 text-[length:clamp(1.8rem,3.5vw,2.6rem)] font-extrabold tracking-[-0.03em] text-white";
+const sectionDescription =
+  "mx-auto max-w-[520px] text-[15px] leading-[1.6] text-fg-secondary";
+
+const quickLinkBtn =
+  "mb-2.5 w-full cursor-pointer rounded-xl border border-line bg-card px-[18px] py-3.5 text-left text-[14.5px] " +
+  "font-medium text-fg transition-all duration-200 hover:border-line-focus hover:bg-[#181818]";
 
 const FAQ = ({ user }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
+  // Акордеон: відкрите питання (за замовчуванням перше), одночасно лише одне
+  const [openIndex, setOpenIndex] = useState(0);
 
   // Міні-віджет погоди у Львові для закриття вимоги «Інформер»
   const [weather, setWeather] = useState(null);
@@ -32,181 +44,167 @@ const FAQ = ({ user }) => {
     : [];
 
   return (
-    <>
-      <main className="faq-page py-5">
-        <div className="container">
-          <header className="text-center mb-5">
-            <span className="section-badge mb-3">
-              {t("faq.badge", "Допомога")}
-            </span>
-            <h1 className="section-heading">
-              {t("faq.title", "Чим ми можемо вам допомогти?")}
-            </h1>
-            <p className="section-description">
-              {t(
-                "faq.subtitle",
-                "Знаходьте відповіді на свої запитання нижче.",
-              )}
-            </p>
+    <main className="bg-page px-4 py-12 text-fg">
+      <div className="mx-auto w-full max-w-[1140px]">
+        <header className="mb-12 text-center">
+          <span className={sectionBadge}>{t("faq.badge", "Допомога")}</span>
+          <h1 className={sectionHeading}>
+            {t("faq.title", "Чим ми можемо вам допомогти?")}
+          </h1>
+          <p className={sectionDescription}>
+            {t("faq.subtitle", "Знаходьте відповіді на свої запитання нижче.")}
+          </p>
 
-            {weather && (
-              <div
-                className="d-inline-flex align-items-center gap-2 px-3 py-1 mt-3 rounded-pill"
-                style={{
-                  background: "rgba(255,255,255,0.05)",
-                  border: "1px solid #262626",
-                  fontSize: "13px",
-                }}
-              >
-                <span>📍 {t("rgr.weatherCity")}:</span>
-                <span className="text-white fw-bold">
-                  {weather.temperature}°C
-                </span>
-                <span className="text-secondary">
-                  | {t("rgr.weatherWind")}: {weather.windspeed}{" "}
-                  {t("rgr.weatherSpeedUnit")}
-                </span>
-              </div>
-            )}
-
-            <div className="faq-search-wrapper mt-4 mx-auto">
-              <i className="bi bi-search search-icon"></i>
-              <input
-                type="text"
-                className="faq-search-input"
-                placeholder={t("faq.searchPlaceholder", "Пошук запитання...")}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+          {weather && (
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-line bg-white/5 px-4 py-1 text-[13px]">
+              <span>📍 {t("rgr.weatherCity")}:</span>
+              <span className="font-bold text-white">
+                {weather.temperature}°C
+              </span>
+              <span className="text-[#6c757d]">
+                | {t("rgr.weatherWind")}: {weather.windspeed}{" "}
+                {t("rgr.weatherSpeedUnit")}
+              </span>
             </div>
-          </header>
+          )}
 
-          <div className="row g-4 justify-content-center mt-2">
-            <aside className="col-12 col-lg-4">
-              <div className="faq-sidebar">
-                <div className="quick-links mb-4">
-                  <button
-                    type="button"
-                    className="quick-link-btn"
-                    onClick={() =>
-                      user ? navigate("/profile") : navigate("/regist")
-                    }
-                  >
-                    <i className="bi bi-person me-2"></i>{" "}
-                    {t("faq.sidebar.profileLink", "Профіль")}
-                  </button>
-                  <button
-                    type="button"
-                    className="quick-link-btn"
-                    onClick={() => navigate("/test")}
-                  >
-                    <i className="bi bi-person-check-fill me-2"></i>{" "}
-                    {t("faq.sidebar.testLink", "Тест")}
-                  </button>
-                </div>
+          <div className="relative mx-auto mt-6 max-w-[550px]">
+            <i className="bi bi-search absolute left-[18px] top-1/2 -translate-y-1/2 text-fg-secondary"></i>
+            <input
+              type="text"
+              className="h-12 w-full rounded-xl border border-line bg-card pl-12 pr-5 text-white outline-none transition-colors duration-200 focus:border-line-focus"
+              placeholder={t("faq.searchPlaceholder", "Пошук запитання...")}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </header>
 
-                <div
-                  className="p-3 rounded-4 mb-4"
-                  style={{ background: "#121212", border: "1px solid #262626" }}
+        <div className="mt-2 flex flex-wrap justify-center gap-6">
+          <aside className="w-full lg:w-[calc(33.333%-16px)]">
+            <div>
+              <div className="mb-6">
+                <button
+                  type="button"
+                  className={quickLinkBtn}
+                  onClick={() =>
+                    user ? navigate("/profile") : navigate("/regist")
+                  }
                 >
-                  <div className="small text-secondary fw-bold mb-2">
-                    <i className="bi bi-youtube text-danger me-2"></i>
-                    {t("rgr.videoTitle")}
-                  </div>
-                  <div
-                    className="ratio ratio-16x9 rounded-3 overflow-hidden"
-                    style={{ border: "1px solid #262626" }}
-                  >
-                    <iframe
-                      src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                      title="Dormly Demo"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                </div>
+                  <i className="bi bi-person mr-2"></i>{" "}
+                  {t("faq.sidebar.profileLink", "Профіль")}
+                </button>
+                <button
+                  type="button"
+                  className={quickLinkBtn}
+                  onClick={() => navigate("/test")}
+                >
+                  <i className="bi bi-person-check-fill mr-2"></i>{" "}
+                  {t("faq.sidebar.testLink", "Тест")}
+                </button>
+              </div>
 
-                <div className="support-card text-center p-4">
-                  <div className="support-icon-wrapper mb-3">
-                    <i className="bi bi-patch-question fs-4"></i>
-                  </div>
-                  <h2 className="support-title h5 mb-2">
-                    {t("faq.sidebar.supportTitle", "Підтримка")}
-                  </h2>
-                  <p className="support-text mb-3">
-                    {t(
-                      "faq.sidebar.supportText",
-                      "Зв'яжіться з нами за потреби.",
-                    )}
-                  </p>
-                  <a
-                    href="mailto:support@dormly.app"
-                    className="btn btn-support w-100"
-                  >
-                    {t("faq.sidebar.contactBtn", "Написати нам")}
-                  </a>
+              <div className="mb-6 rounded-2xl border border-line bg-card p-4">
+                <div className="mb-2 text-sm font-bold text-[#6c757d]">
+                  <i className="bi bi-youtube mr-2 text-[#dc3545]"></i>
+                  {t("rgr.videoTitle")}
+                </div>
+                <div className="aspect-video overflow-hidden rounded-lg border border-line">
+                  <iframe
+                    className="h-full w-full"
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    title="Dormly Demo"
+                    allowFullScreen
+                  ></iframe>
                 </div>
               </div>
-            </aside>
 
-            <section className="col-12 col-lg-8">
-              <div
-                className="accordion custom-faq-accordion mb-5"
-                id="faqAccordion"
-              >
-                {filteredItems.map((item, index) => (
-                  <div className="accordion-item" key={item.id || index}>
-                    <h2 className="accordion-header">
+              <div className="rounded-2xl border border-line bg-card p-6 text-center">
+                <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-[10px] bg-accent-cyan/10 text-accent-cyan">
+                  <i className="bi bi-patch-question text-[1.5rem]"></i>
+                </div>
+                <h2 className="mb-2 text-[17px] font-bold text-white">
+                  {t("faq.sidebar.supportTitle", "Підтримка")}
+                </h2>
+                <p className="mb-4 text-[13.5px] leading-normal text-fg-secondary">
+                  {t(
+                    "faq.sidebar.supportText",
+                    "Зв'яжіться з нами за потреби.",
+                  )}
+                </p>
+                <a
+                  href="mailto:support@dormly.app"
+                  className="block w-full rounded-lg border border-transparent bg-white p-[9px] text-center text-sm font-semibold text-black transition-all duration-200 hover:bg-[#e5e5e5]"
+                >
+                  {t("faq.sidebar.contactBtn", "Написати нам")}
+                </a>
+              </div>
+            </div>
+          </aside>
+
+          <section className="w-full lg:w-[calc(66.667%-8px)]">
+            <div className="mb-12">
+              {filteredItems.map((item, index) => {
+                const isOpen = openIndex === index;
+                return (
+                  <div
+                    key={item.id || index}
+                    className="mb-3 overflow-hidden rounded-xl border border-line bg-card"
+                  >
+                    <h2 className="m-0">
                       <button
-                        className={`accordion-button ${index !== 0 ? "collapsed" : ""}`}
                         type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target={`#faq-${index}`}
+                        aria-expanded={isOpen}
+                        aria-controls={`faq-${index}`}
+                        onClick={() => setOpenIndex(isOpen ? null : index)}
+                        className="flex w-full cursor-pointer items-center bg-card px-5 py-[18px] text-left text-[15.5px] font-semibold text-white"
                       >
                         {item.question}
+                        <i
+                          className={
+                            "bi bi-chevron-down ml-auto pl-3 text-sm transition-transform duration-200 " +
+                            (isOpen ? "rotate-180" : "")
+                          }
+                        ></i>
                       </button>
                     </h2>
                     <div
                       id={`faq-${index}`}
-                      className={`accordion-collapse collapse ${index === 0 ? "show" : ""}`}
-                      data-bs-parent="#faqAccordion"
+                      className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+                      style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
                     >
-                      <div className="accordion-body">{item.answer}</div>
+                      <div className="overflow-hidden">
+                        <div className="px-5 pb-[18px] text-[14.5px] leading-[1.6] text-fg-secondary">
+                          {item.answer}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+              })}
+            </div>
 
-              <div
-                className="p-4 rounded-4"
-                style={{ background: "#121212", border: "1px solid #262626" }}
-              >
-                <h3 className="h5 fw-bold text-white mb-2">
-                  <i className="bi bi-geo-alt me-2 text-primary"></i>
-                  {t("rgr.mapTitle")}
-                </h3>
-                <p className="text-secondary small mb-3">{t("rgr.mapDesc")}</p>
-                <div
-                  className="rounded-3 overflow-hidden"
-                  style={{ height: "300px", border: "1px solid #262626" }}
-                >
-                  <iframe
-                    title="Lviv Polytechnic Campus"
-                    width="100%"
-                    height="100%"
-                    style={{
-                      border: 0,
-                      filter: "invert(90%) hue-rotate(180deg)",
-                    }}
-                    loading="lazy"
-                    src="https://maps.google.com/maps?q=Lviv%20Polytechnic%20National%20University&t=&z=14&ie=UTF8&iwloc=&output=embed"
-                  ></iframe>
-                </div>
+            <div className="rounded-2xl border border-line bg-card p-6">
+              <h3 className="mb-2 text-xl font-bold text-white">
+                <i className="bi bi-geo-alt mr-2 text-[#0d6efd]"></i>
+                {t("rgr.mapTitle")}
+              </h3>
+              <p className="mb-4 text-sm text-[#6c757d]">{t("rgr.mapDesc")}</p>
+              <div className="h-[300px] overflow-hidden rounded-lg border border-line">
+                <iframe
+                  title="Lviv Polytechnic Campus"
+                  width="100%"
+                  height="100%"
+                  className="border-0 [filter:invert(90%)_hue-rotate(180deg)]"
+                  loading="lazy"
+                  src="https://maps.google.com/maps?q=Lviv%20Polytechnic%20National%20University&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                ></iframe>
               </div>
-            </section>
-          </div>
+            </div>
+          </section>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 };
 

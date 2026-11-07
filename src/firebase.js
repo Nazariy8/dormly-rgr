@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth, GoogleAuthProvider } from "firebase/auth"; // Обов'язково додай цей імпорт
+import { getAuth, GoogleAuthProvider } from "firebase/auth"; 
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -14,8 +14,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// Ці два рядки експортують базу і авторизацію для інших файлів
 export const db = getFirestore(app);
-export const auth = getAuth(app); // Перевір, щоб цей рядок точно був!
+export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const storage = getStorage(app);

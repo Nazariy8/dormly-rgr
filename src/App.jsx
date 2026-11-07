@@ -23,7 +23,7 @@ import Chat from "./pages/Chat.jsx";
 import ResetPass from "./pages/ResetPass.jsx";
 import Author from "./pages/Author";
 
-import "./css/main.scss";
+import "./css/index.css";
 
 function App() {
   const { t } = useTranslation();

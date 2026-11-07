@@ -1,4 +1,5 @@
 @use "sass:color";
+@import "tailwindcss";
 
 :root {
   /* Фони (Vercel-стиль) */
@@ -87,7 +88,6 @@ input[type="password"] {
     color: transparent;
   }
 
-  
   // Мобільне розкривне меню
   .navbar-collapse {
     @media (max-width: 991.98px) {

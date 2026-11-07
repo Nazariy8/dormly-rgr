@@ -24,8 +24,55 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import "../css/chat.scss";
 import defaultUser from "../img/profile/user.jpg";
+
+/* ---------- Класи (перенесено з chat.scss) ---------- */
+const scrollCls =
+  "[&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent " +
+  "[&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-white/10";
+
+const wrapperCls =
+  "flex h-[calc(100dvh-65px)] max-h-[calc(100dvh-65px)] w-full items-center justify-center overflow-hidden " +
+  "bg-black px-4 pb-4 pt-3 text-fg " +
+  "bg-[image:radial-gradient(circle_at_50%_15%,rgba(105,48,195,0.14)_0%,rgba(10,10,10,0.95)_55%,#000000_100%)] " +
+  "max-[768px]:h-[calc(100dvh-60px)] max-[768px]:max-h-[calc(100dvh-60px)] max-[768px]:p-0";
+
+const appCardCls =
+  "relative flex h-full w-full max-w-[1200px] overflow-hidden rounded-[20px] border border-white/[0.08] " +
+  "backdrop-blur-xl shadow-[0_30px_60px_-20px_rgba(0,0,0,0.9)] " +
+  "bg-[image:linear-gradient(180deg,rgba(18,18,18,0.85)_0%,rgba(12,12,12,0.95)_100%)] " +
+  "max-[768px]:rounded-none max-[768px]:border-none";
+
+const dotsCls = "h-2 w-2 rounded-full";
+
+const actionBtnCls =
+  "flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.04] " +
+  "text-fg-secondary transition-all duration-150 hover:border-white/20 hover:bg-white/[0.08] hover:text-white";
+
+const searchInputCls =
+  "h-9 w-full rounded-lg border border-white/[0.07] bg-[#080808] pl-[34px] pr-3 text-[13px] text-white outline-none " +
+  "transition-all duration-150 placeholder:text-[#4a4a4a] focus:border-white/[0.22] " +
+  "focus:shadow-[0_0_0_2px_rgba(105,48,195,0.15)]";
+
+const cardRowBase =
+  "mb-[3px] flex cursor-pointer items-center rounded-[10px] border px-3 py-2.5 transition-all duration-150 ";
+
+const mutedP = "mb-4 text-center text-sm text-[#6c757d]";
+
+const outlineLightBtn =
+  "mr-2 cursor-pointer rounded-full border border-[#f8f9fa] px-4 py-1 text-xs leading-normal text-[#f8f9fa] " +
+  "transition-colors duration-150 hover:bg-[#f8f9fa] hover:text-black";
+const outlineDangerBtn =
+  "mr-2 cursor-pointer rounded-full border border-[#dc3545] px-4 py-1 text-xs leading-normal text-[#dc3545] " +
+  "transition-colors duration-150 hover:bg-[#dc3545] hover:text-white";
+
+const modalLabelCls = "mb-4 text-sm font-semibold uppercase text-[#6c757d]";
+const modalRowCls =
+  "mb-2 flex items-center justify-between rounded-lg border border-white/[0.08] bg-[#080808] p-2";
+
+const unreadBadgeCls =
+  "ml-2 inline-block whitespace-nowrap rounded-full bg-[#dc3545] px-[0.65em] py-[0.35em] text-center " +
+  "text-[10px] font-bold leading-none text-white";
 
 const Chat = ({ user }) => {
   const { t } = useTranslation();
@@ -508,44 +555,53 @@ const Chat = ({ user }) => {
     }
   };
 
+  const mobileChatActive = Boolean(activeChatUser);
+
   return (
-    <main
-      className={`chat-page-wrapper ${activeChatUser ? "mobile-chat-active" : ""}`}
-    >
-      <div className="chat-app-card">
+    <main className={wrapperCls}>
+      <div className={appCardCls}>
         {/* ЛІВА ПАНЕЛЬ */}
-        <aside className="chat-sidebar">
-          <div className="sidebar-header">
-            <div className="header-title-box">
-              <div className="mac-dots">
-                <span className="dot dot-red"></span>
-                <span className="dot dot-yellow"></span>
-                <span className="dot dot-green"></span>
+        <aside
+          className={
+            "flex h-full w-[340px] min-w-[280px] shrink-0 flex-col border-r border-white/[0.07] " +
+            "bg-[rgba(14,14,14,0.6)] max-[768px]:w-full " +
+            (mobileChatActive ? "max-[768px]:hidden" : "")
+          }
+        >
+          <div className="flex items-center justify-between border-b border-white/5 px-5 py-4">
+            <div className="flex items-center gap-2.5">
+              <div className="flex gap-[5px]">
+                <span className={`${dotsCls} bg-[#ef4444]`}></span>
+                <span className={`${dotsCls} bg-[#eab308]`}></span>
+                <span className={`${dotsCls} bg-[#22c55e]`}></span>
               </div>
-              <h2>{t("chat.title")}</h2>
+              <h2 className="m-0 text-base font-bold tracking-[-0.01em] text-white">
+                {t("chat.title")}
+              </h2>
             </div>
-            <div className="actions">
-              <div className="position-relative d-inline-block">
+            <div className="flex items-center">
+              <div className="relative inline-block">
                 <button
                   type="button"
-                  className="action-icon-btn"
+                  className={actionBtnCls}
                   onClick={() => setShowSocialModal(true)}
                   title={t("chat.modalTitle")}
                 >
                   <i className="bi bi-person-lines-fill"></i>
                 </button>
                 {incomingRequests.length > 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"></span>
+                  <span className="absolute left-full top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#dc3545] p-1"></span>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="search-box">
-            <div className="search-input-wrapper">
-              <i className="bi bi-search"></i>
+          <div className="border-b border-white/5 px-4 py-3">
+            <div className="relative flex items-center">
+              <i className="bi bi-search absolute left-3 text-[13px] text-[#555555]"></i>
               <input
                 type="text"
+                className={searchInputCls}
                 placeholder={t("chat.searchPlaceholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -553,25 +609,21 @@ const Chat = ({ user }) => {
             </div>
           </div>
 
-          <div className="chat-list custom-scroll">
+          <div className={`flex-1 overflow-y-auto p-2 ${scrollCls}`}>
             {searchTerm.length > 0 ? (
               <>
-                <div className="text-secondary px-2 mb-2 mt-2 small fw-semibold text-uppercase">
+                <div className="mb-2 mt-2 px-2 text-sm font-semibold uppercase text-[#6c757d]">
                   {t("chat.searchResults")}
                 </div>
                 {searchTerm.length < 3 ? (
-                  <p className="text-secondary text-center mt-4 small">
-                    {t("chat.searchMinChars")}
-                  </p>
+                  <p className={`mt-6 ${mutedP}`}>{t("chat.searchMinChars")}</p>
                 ) : isSearching ? (
-                  <p className="text-secondary text-center mt-4 small">
-                    {t("chat.searching")}
-                  </p>
+                  <p className={`mt-6 ${mutedP}`}>{t("chat.searching")}</p>
                 ) : searchResults.length > 0 ? (
                   searchResults.map((u) => (
                     <div
                       key={u.id}
-                      className="user-search-card d-flex align-items-center"
+                      className={`${cardRowBase} border-transparent hover:bg-white/[0.03]`}
                       onClick={() => {
                         setActiveChatUser(u);
                         setSearchTerm("");
@@ -580,74 +632,57 @@ const Chat = ({ user }) => {
                       <img
                         src={u.avatar || defaultUser}
                         alt="avatar"
-                        className="rounded-circle object-fit-cover"
-                        style={{ width: "40px", height: "40px" }}
+                        className="h-10 w-10 rounded-full object-cover"
                       />
-                      <div className="ms-3 overflow-hidden">
-                        <div className="m-0 text-truncate text-white fw-medium small">
+                      <div className="ml-4 overflow-hidden">
+                        <div className="m-0 truncate text-sm font-medium text-white">
                           {u.firstName} {u.lastName}
                         </div>
-                        <small
-                          className="text-secondary"
-                          style={{ fontSize: "11.5px" }}
-                        >
+                        <small className="text-[11.5px] text-[#6c757d]">
                           @{u.username}
                         </small>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-secondary text-center mt-4 small">
-                    {t("chat.noUsersFound")}
-                  </p>
+                  <p className={`mt-6 ${mutedP}`}>{t("chat.noUsersFound")}</p>
                 )}
               </>
             ) : chatHistory.length === 0 ? (
-              <p className="text-secondary text-center mt-5 px-3 small">
-                {t("chat.noChatsYet")}
-              </p>
+              <p className={`mt-12 px-4 ${mutedP}`}>{t("chat.noChatsYet")}</p>
             ) : (
               chatHistory.map((chat) => (
                 <div
                   key={chat.id}
-                  className={`user-search-card d-flex align-items-center ${
-                    activeChatUser?.id === chat.otherUser.id
-                      ? "active-chat"
-                      : ""
-                  }`}
+                  className={
+                    cardRowBase +
+                    (activeChatUser?.id === chat.otherUser.id
+                      ? "border-white/10 bg-white/[0.06]"
+                      : "border-transparent hover:bg-white/[0.03]")
+                  }
                   onClick={() => handleChatClick(chat)}
                 >
                   <img
                     src={chat.otherUser.avatar || defaultUser}
                     alt="avatar"
-                    className="rounded-circle object-fit-cover flex-shrink-0"
-                    style={{ width: "42px", height: "42px" }}
+                    className="h-[42px] w-[42px] shrink-0 rounded-full object-cover"
                   />
-                  <div className="ms-3 overflow-hidden flex-grow-1">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span
-                        className="text-white fw-semibold text-truncate"
-                        style={{ fontSize: "14px" }}
-                      >
+                  <div className="ml-4 grow overflow-hidden">
+                    <div className="flex items-center justify-between">
+                      <span className="truncate text-sm font-semibold text-white">
                         {chat.otherUser.firstName} {chat.otherUser.lastName}
                       </span>
 
                       {chat.unreadCounts?.[user.uid] > 0 && (
-                        <span
-                          className="badge rounded-pill bg-danger ms-2"
-                          style={{ fontSize: "10px" }}
-                        >
+                        <span className={unreadBadgeCls}>
                           {chat.unreadCounts[user.uid]}
                         </span>
                       )}
                     </div>
 
-                    <small
-                      className="text-secondary text-truncate d-block mt-1"
-                      style={{ fontSize: "12px" }}
-                    >
+                    <small className="mt-1 block truncate text-xs text-[#6c757d]">
                       {chat.lastMessageSender === user.uid && (
-                        <span className="text-white fw-medium">
+                        <span className="font-medium text-white">
                           {t("chat.you")}{" "}
                         </span>
                       )}
@@ -661,40 +696,40 @@ const Chat = ({ user }) => {
         </aside>
 
         {/* ПРАВА ПАНЕЛЬ */}
-        <section className="chat-main">
+        <section
+          className={
+            "flex h-full flex-1 flex-col overflow-hidden " +
+            (mobileChatActive ? "max-[768px]:w-full" : "max-[768px]:hidden")
+          }
+        >
           {activeChatUser ? (
             <>
-              <header className="chat-main-header">
+              <header className="flex h-[60px] shrink-0 items-center border-b border-white/[0.06] bg-[rgba(14,14,14,0.4)] px-6">
                 <button
-                  className="btn btn-link text-secondary p-0 me-3 d-md-none"
+                  className="mr-4 cursor-pointer p-0 text-[#6c757d] md:hidden"
                   onClick={() => setActiveChatUser(null)}
                 >
-                  <i className="bi bi-arrow-left fs-4"></i>
+                  <i className="bi bi-arrow-left text-[1.5rem]"></i>
                 </button>
 
                 <img
                   src={activeChatUser.avatar || defaultUser}
                   alt="avatar"
-                  className="rounded-circle object-fit-cover"
-                  style={{ width: "38px", height: "38px" }}
+                  className="h-[38px] w-[38px] rounded-full object-cover"
                 />
-                <div className="ms-3">
-                  <h1 className="h6 m-0 fw-bold text-white">
+                <div className="ml-4">
+                  <h1 className="m-0 text-base font-bold text-white">
                     {activeChatUser.firstName} {activeChatUser.lastName}
                   </h1>
-                  <small
-                    className="text-secondary"
-                    style={{ fontSize: "11.5px" }}
-                  >
+                  <small className="text-[11.5px] text-[#6c757d]">
                     @{activeChatUser.username}
                   </small>
                 </div>
 
-                <div className="ms-auto d-flex align-items-center">
+                <div className="ml-auto flex items-center">
                   {friendStatus === "none" && (
                     <button
-                      className="btn btn-sm btn-outline-light rounded-pill px-3 me-2"
-                      style={{ fontSize: "12px" }}
+                      className={outlineLightBtn}
                       onClick={handleAddFriend}
                     >
                       <i className="bi bi-person-plus"></i>{" "}
@@ -704,8 +739,7 @@ const Chat = ({ user }) => {
 
                   {friendStatus === "pending" && (
                     <button
-                      className="btn btn-sm btn-outline-danger rounded-pill px-3 me-2"
-                      style={{ fontSize: "12px" }}
+                      className={outlineDangerBtn}
                       onClick={handleCancelRequest}
                     >
                       <i className="bi bi-x-circle"></i>{" "}
@@ -714,28 +748,19 @@ const Chat = ({ user }) => {
                   )}
 
                   {friendStatus === "friends" && (
-                    <span
-                      className="badge rounded-pill bg-success-subtle text-success px-3 py-1 me-2"
-                      style={{ fontSize: "11px" }}
-                    >
-                      <i className="bi bi-person-check me-1"></i>{" "}
+                    <span className="mr-2 inline-block whitespace-nowrap rounded-full bg-[#051b11] px-4 py-1 text-center text-[11px] font-bold leading-none text-[#198754]">
+                      <i className="bi bi-person-check mr-1"></i>{" "}
                       {t("chat.friends")}
                     </span>
                   )}
                 </div>
               </header>
 
-              <div className="chat-messages custom-scroll">
-                <div className="text-center my-3">
-                  <span
-                    className="px-3 py-1 rounded-pill small"
-                    style={{
-                      backgroundColor: "rgba(255,255,255,0.03)",
-                      color: "#777777",
-                      border: "1px solid rgba(255,255,255,0.06)",
-                      fontSize: "11.5px",
-                    }}
-                  >
+              <div
+                className={`flex flex-1 flex-col overflow-y-auto p-6 ${scrollCls}`}
+              >
+                <div className="my-4 text-center">
+                  <span className="rounded-full border border-white/[0.06] bg-white/[0.03] px-4 py-1 text-[11.5px] text-[#777777]">
                     {t("chat.chatHistoryStart", {
                       name: activeChatUser.firstName,
                     })}
@@ -765,82 +790,56 @@ const Chat = ({ user }) => {
                   return (
                     <div key={msg.id}>
                       {showDateDivider && (
-                        <div className="d-flex justify-content-center my-3">
-                          <span
-                            className="px-3 py-1 rounded-pill small fw-medium"
-                            style={{
-                              backgroundColor: "rgba(255,255,255,0.04)",
-                              color: "#888888",
-                              border: "1px solid rgba(255,255,255,0.06)",
-                              fontSize: "11px",
-                            }}
-                          >
+                        <div className="my-4 flex justify-center">
+                          <span className="rounded-full border border-white/[0.06] bg-white/[0.04] px-4 py-1 text-[11px] font-medium text-[#888888]">
                             {dateString}
                           </span>
                         </div>
                       )}
 
                       <div
-                        className={`d-flex mb-2 ${isMine ? "justify-content-end" : "justify-content-start"}`}
+                        className={`mb-2 flex ${isMine ? "justify-end" : "justify-start"}`}
                       >
                         <div
-                          className="px-3 py-2 position-relative"
+                          className={
+                            "relative max-w-[70%] border px-4 py-2 [word-break:break-word] " +
+                            (isMine
+                              ? "cursor-pointer rounded-[16px_16px_3px_16px] border-white bg-white text-black shadow-[0_4px_12px_rgba(255,255,255,0.15)]"
+                              : "cursor-default rounded-[16px_16px_16px_3px] border-white/[0.08] bg-[#141414] text-fg")
+                          }
                           onContextMenu={(e) => handleMessageOptions(e, msg)}
                           onClick={(e) => handleMessageOptions(e, msg)}
-                          style={{
-                            maxWidth: "70%",
-                            wordBreak: "break-word",
-                            backgroundColor: isMine ? "#ffffff" : "#141414",
-                            color: isMine ? "#000000" : "#ededed",
-                            border: isMine
-                              ? "1px solid #ffffff"
-                              : "1px solid rgba(255, 255, 255, 0.08)",
-                            borderRadius: isMine
-                              ? "16px 16px 3px 16px"
-                              : "16px 16px 16px 3px",
-                            boxShadow: isMine
-                              ? "0 4px 12px rgba(255, 255, 255, 0.15)"
-                              : "none",
-                            cursor: isMine ? "pointer" : "default",
-                          }}
                         >
                           {msg.image && (
                             <img
                               src={msg.image}
                               alt="attachment"
-                              className="rounded-3 mb-2 w-100"
-                              style={{
-                                maxHeight: "260px",
-                                objectFit: "cover",
-                                cursor: "pointer",
-                              }}
+                              className="mb-2 max-h-[260px] w-full cursor-pointer rounded-lg object-cover"
                               onClick={() => window.open(msg.image, "_blank")}
                             />
                           )}
                           {msg.text && (
-                            <div
-                              style={{ fontSize: "13.5px", lineHeight: "1.4" }}
-                            >
+                            <div className="text-[13.5px] leading-[1.4]">
                               {msg.text}
                             </div>
                           )}
 
                           <div
-                            className={`d-flex align-items-center mt-1 gap-1 ${
-                              isMine
-                                ? "justify-content-end text-muted"
-                                : "justify-content-start text-secondary"
-                            }`}
-                            style={{ fontSize: "10.5px" }}
+                            className={
+                              "mt-1 flex items-center gap-1 text-[10.5px] " +
+                              (isMine
+                                ? "justify-end text-[#6c757d]"
+                                : "justify-start text-[#6c757d]")
+                            }
                           >
                             {msg.isEdited && (
-                              <span className="fst-italic">
+                              <span className="italic">
                                 ({t("chat.edited")})
                               </span>
                             )}
                             <span>{formatTime(msg.createdAt)}</span>
                             {isMine && (
-                              <i className="bi bi-check2-all ms-1"></i>
+                              <i className="bi bi-check2-all ml-1"></i>
                             )}
                           </div>
                         </div>
@@ -851,11 +850,11 @@ const Chat = ({ user }) => {
                 <div ref={messagesEndRef} />
               </div>
 
-              <footer className="chat-input-area">
+              <footer className="shrink-0 border-t border-white/[0.06] bg-[rgba(14,14,14,0.6)] px-6 py-4">
                 {editingMessage && (
-                  <div className="d-flex justify-content-between align-items-center mb-2 px-2 text-warning small">
+                  <div className="mb-2 flex items-center justify-between px-2 text-sm text-[#ffc107]">
                     <span>
-                      <i className="bi bi-pencil me-1"></i>{" "}
+                      <i className="bi bi-pencil mr-1"></i>{" "}
                       {t("chat.editMessage")}
                     </span>
                     <i
@@ -865,29 +864,27 @@ const Chat = ({ user }) => {
                   </div>
                 )}
 
-                <div className="chat-input-box">
+                <div className="flex items-center rounded-xl border border-white/[0.08] bg-[#080808] px-2 py-[5px] transition-all duration-200 focus-within:border-white/[0.22] focus-within:shadow-[0_0_0_3px_rgba(105,48,195,0.15)]">
                   <label
                     htmlFor="image-input"
-                    className="btn border-0 text-secondary p-0 d-flex align-items-center justify-content-center"
-                    style={{
-                      width: "34px",
-                      height: "34px",
-                      cursor: isUploading ? "not-allowed" : "pointer",
-                    }}
+                    className={
+                      "flex h-[34px] w-[34px] items-center justify-center p-0 text-[#6c757d] " +
+                      (isUploading ? "cursor-not-allowed" : "cursor-pointer")
+                    }
                   >
                     {isUploading ? (
                       <div
-                        className="spinner-border spinner-border-sm text-light"
+                        className="h-4 w-4 animate-spin rounded-full border-[3px] border-[#f8f9fa] border-r-transparent"
                         role="status"
                       ></div>
                     ) : (
-                      <i className="bi bi-paperclip fs-5"></i>
+                      <i className="bi bi-paperclip text-[1.25rem]"></i>
                     )}
                     <input
                       type="file"
                       id="image-input"
                       accept="image/*"
-                      style={{ display: "none" }}
+                      className="hidden"
                       onChange={handleImageUpload}
                       disabled={isUploading}
                     />
@@ -896,6 +893,7 @@ const Chat = ({ user }) => {
                   <input
                     ref={inputRef}
                     type="text"
+                    className="min-w-0 flex-1 border-none bg-transparent px-3 py-2 text-sm text-white outline-none placeholder:text-[#525252]"
                     placeholder={
                       editingMessage
                         ? t("chat.editInputPlaceholder")
@@ -932,31 +930,25 @@ const Chat = ({ user }) => {
                   />
 
                   <button
-                    className="btn-send"
+                    className="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-lg border-none bg-white text-black transition-all duration-150 hover:-translate-y-px hover:bg-[#e5e5e5]"
                     onClick={
                       editingMessage ? handleSaveEdit : handleSendMessage
                     }
                     aria-label="Send"
                   >
                     {editingMessage ? (
-                      <i className="bi bi-check-lg fs-5"></i>
+                      <i className="bi bi-check-lg text-[1.25rem]"></i>
                     ) : (
-                      <i className="bi bi-arrow-up fs-5"></i>
+                      <i className="bi bi-arrow-up text-[1.25rem]"></i>
                     )}
                   </button>
                 </div>
               </footer>
             </>
           ) : (
-            <div className="d-flex h-100 flex-column justify-content-center align-items-center text-center p-4">
-              <i className="bi bi-chat-dots fs-1 text-secondary mb-3 opacity-50"></i>
-              <span
-                className="text-secondary px-4 py-2 rounded-pill small"
-                style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                }}
-              >
+            <div className="flex h-full flex-col items-center justify-center p-6 text-center">
+              <i className="bi bi-chat-dots mb-4 text-[2.5rem] text-[#6c757d] opacity-50"></i>
+              <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-6 py-2 text-sm text-[#6c757d]">
                 {t("chat.noChatSelected")}
               </span>
             </div>
@@ -967,11 +959,11 @@ const Chat = ({ user }) => {
       {/* Контекстне меню */}
       {contextMenu && (
         <div
-          className="custom-context-menu"
+          className="fixed z-[9999] rounded-[10px] border border-white/10 bg-[#141414] shadow-[0_15px_30px_rgba(0,0,0,0.8)]"
           style={{ top: contextMenu.mouseY, left: contextMenu.mouseX }}
         >
           <div
-            className="context-menu-item"
+            className="flex cursor-pointer items-center gap-2 px-3.5 py-2 text-[13px] text-fg hover:bg-white/5"
             onClick={() => {
               setEditingMessage(contextMenu.msg);
               setEditDraft(contextMenu.msg.text);
@@ -980,7 +972,7 @@ const Chat = ({ user }) => {
             <i className="bi bi-pencil"></i> {t("chat.edit")}
           </div>
           <div
-            className="context-menu-item text-danger"
+            className="flex cursor-pointer items-center gap-2 px-3.5 py-2 text-[13px] text-[#dc3545] hover:bg-white/5"
             onClick={() => handleDeleteMessage(contextMenu.msg.id)}
           >
             <i className="bi bi-trash"></i> {t("chat.delete")}
@@ -991,92 +983,70 @@ const Chat = ({ user }) => {
       {/* Модалка друзів */}
       {showSocialModal && (
         <div
-          className="modal d-block"
-          style={{
-            backgroundColor: "rgba(0,0,0,0.8)",
-            backdropFilter: "blur(8px)",
-          }}
+          className="fixed inset-0 z-[1055] overflow-y-auto bg-black/80 backdrop-blur-[8px]"
           onClick={() => setShowSocialModal(false)}
         >
           <div
-            className="modal-dialog modal-dialog-centered"
+            className="mx-2 my-2 flex min-h-[calc(100%-1rem)] items-center min-[576px]:mx-auto min-[576px]:my-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="modal-content"
-              style={{
-                backgroundColor: "#111111",
-                color: "#ffffff",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "18px",
-              }}
-            >
-              <div className="modal-header border-0 pb-0">
-                <h2 className="h5 fw-bold m-0">{t("chat.modalTitle")}</h2>
+            <div className="w-full rounded-[18px] border border-white/10 bg-[#111111] text-white">
+              <div className="flex items-center justify-between p-4 pb-0">
+                <h2 className="m-0 text-xl font-bold">
+                  {t("chat.modalTitle")}
+                </h2>
                 <button
                   type="button"
-                  className="btn-close btn-close-white"
+                  aria-label="Close"
+                  className="cursor-pointer p-1 text-white/50 transition-colors duration-150 hover:text-white/75"
                   onClick={() => setShowSocialModal(false)}
-                ></button>
+                >
+                  <i className="bi bi-x-lg"></i>
+                </button>
               </div>
 
-              <div
-                className="modal-body custom-scroll"
-                style={{ maxHeight: "380px", overflowY: "auto" }}
-              >
-                <div className="text-secondary small text-uppercase fw-semibold mb-3">
+              <div className={`max-h-[380px] overflow-y-auto p-4 ${scrollCls}`}>
+                <div className={modalLabelCls}>
                   {t("chat.requests")} ({incomingRequests.length})
                 </div>
                 {incomingRequests.length === 0 && (
-                  <p className="text-secondary small mb-4">
+                  <p className="mb-6 text-sm text-[#6c757d]">
                     {t("chat.noRequests")}
                   </p>
                 )}
 
                 {incomingRequests.map((req) => (
-                  <div
-                    key={req.id}
-                    className="d-flex align-items-center justify-content-between mb-2 p-2 rounded-3"
-                    style={{
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      background: "#080808",
-                    }}
-                  >
-                    <div className="d-flex align-items-center overflow-hidden">
+                  <div key={req.id} className={modalRowCls}>
+                    <div className="flex items-center overflow-hidden">
                       <img
                         src={req.senderData?.avatar || defaultUser}
                         width="38"
                         height="38"
-                        className="rounded-circle object-fit-cover flex-shrink-0"
+                        className="h-[38px] w-[38px] shrink-0 rounded-full object-cover"
                         alt="avatar"
                       />
-                      <div className="ms-3 overflow-hidden">
-                        <div className="fw-semibold text-truncate small">
+                      <div className="ml-4 overflow-hidden">
+                        <div className="truncate text-sm font-semibold">
                           {req.senderData?.firstName} {req.senderData?.lastName}
                         </div>
-                        <div
-                          className="text-secondary"
-                          style={{ fontSize: "11.5px" }}
-                        >
+                        <div className="text-[11.5px] text-[#6c757d]">
                           @{req.senderData?.username}
                         </div>
                       </div>
                     </div>
 
-                    <div className="ms-2 d-flex gap-2">
+                    <div className="ml-2 flex gap-2">
                       <button
-                        className="btn btn-sm btn-light rounded-pill px-3"
+                        className="cursor-pointer rounded-full border border-[#f8f9fa] bg-[#f8f9fa] px-4 py-1 text-xs font-semibold leading-normal text-black transition-colors duration-150 hover:border-[#c6c7c8] hover:bg-[#d3d4d5]"
                         onClick={() =>
                           acceptFriendRequest(req.id, req.senderId)
                         }
-                        style={{ fontSize: "12px", fontWeight: 600 }}
                       >
                         {t("chat.accept")}
                       </button>
                       <button
-                        className="btn btn-sm btn-outline-secondary rounded-pill"
+                        className="cursor-pointer rounded-full border border-[#6c757d] px-2 py-1 text-xs leading-normal text-[#6c757d] transition-colors duration-150 hover:bg-[#6c757d] hover:text-white"
                         onClick={() => rejectFriendRequest(req.id)}
-                        style={{ fontSize: "12px" }}
                       >
                         <i className="bi bi-trash"></i>
                       </button>
@@ -1084,55 +1054,42 @@ const Chat = ({ user }) => {
                   </div>
                 ))}
 
-                <hr
-                  className="my-4"
-                  style={{ borderColor: "rgba(255,255,255,0.08)" }}
-                />
+                <hr className="my-6 border-white/[0.04]" />
 
-                <div className="text-secondary small text-uppercase fw-semibold mb-3">
+                <div className={modalLabelCls}>
                   {t("chat.myFriends")} ({myFriends.length})
                 </div>
                 {myFriends.length === 0 && (
-                  <p className="text-secondary small mb-0">
+                  <p className="mb-0 text-sm text-[#6c757d]">
                     {t("chat.noFriends")}
                   </p>
                 )}
 
                 {myFriends.map((friend) => (
-                  <div
-                    key={friend.id}
-                    className="d-flex align-items-center justify-content-between mb-2 p-2 rounded-3"
-                    style={{
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      background: "#080808",
-                    }}
-                  >
-                    <div className="d-flex align-items-center">
+                  <div key={friend.id} className={modalRowCls}>
+                    <div className="flex items-center">
                       <img
                         src={friend.avatar || defaultUser}
                         width="34"
                         height="34"
-                        className="rounded-circle object-fit-cover"
+                        className="h-[34px] w-[34px] rounded-full object-cover"
                         alt="avatar"
                       />
-                      <div className="ms-2">
-                        <div className="fw-semibold small">
+                      <div className="ml-2">
+                        <div className="text-sm font-semibold">
                           {friend.firstName} {friend.lastName}
                         </div>
-                        <div
-                          className="text-secondary"
-                          style={{ fontSize: "11.5px" }}
-                        >
+                        <div className="text-[11.5px] text-[#6c757d]">
                           @{friend.username}
                         </div>
                       </div>
                     </div>
 
                     <button
-                      className="btn btn-sm text-secondary border-0"
+                      className="cursor-pointer px-2 py-1 text-[#6c757d]"
                       onClick={() => removeFriend(friend.id)}
                     >
-                      <i className="bi bi-person-x fs-5"></i>
+                      <i className="bi bi-person-x text-[1.25rem]"></i>
                     </button>
                   </div>
                 ))}
