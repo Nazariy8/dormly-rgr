@@ -7,6 +7,8 @@ import julia from "../img/team/julia.webp";
 import zlata from "../img/team/zlata.webp";
 import maks from "../img/team/maks.webp";
 
+import Reviews from "../components/swiper/Reviews";
+
 const teamMembers = [
   { id: "nazar", img: nazar },
   { id: "olena", img: olena },
@@ -62,6 +64,8 @@ const AboutUs = () => {
             </div>
           ))}
         </div>
+
+        <Reviews />
 
         {/* CTA Заклик до дії */}
         <div
